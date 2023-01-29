@@ -26,14 +26,14 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/loreanvictor/pakt.git"
+    "url": "git+https://github.com/loreanvictor/packen.git"
   },
   "author": "Eugene Ghanizadeh Khoub",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/loreanvictor/pakt/issues"
+    "url": "https://github.com/loreanvictor/packen/issues"
   },
-  "homepage": "https://github.com/loreanvictor/pakt#readme",
+  "homepage": "https://github.com/loreanvictor/packen#readme",
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.20.2",
