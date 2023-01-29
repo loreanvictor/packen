@@ -102,3 +102,11 @@ dist
 
 # TernJS port file
 .tern-port
+
+# node modules
+node_modules
+
+# tmp folders
+sample/tmp/*
+!sample/tmp/PLACEHOLDER
+
