@@ -1,7 +1,7 @@
 {
   "name": "packen",
   "description": "Pack isomorphic JavaScript",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
   "types": "dist/es/index.d.ts",
