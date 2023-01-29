@@ -6,14 +6,14 @@
 
 </div>
 
-<div align="center">
+
 
 <img src="logo-dark.svg#gh-dark-mode-only" height="64px"/>
 <img src="logo-light.svg#gh-light-mode-only" height="64px"/>
 
 <small>Pack isomorphic JavaScript</small>
 
-</div>
+
 
 <br><br>
 
