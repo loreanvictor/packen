@@ -42,7 +42,7 @@ packMe()
 <br>
 
 - ☕&emsp;Convenient: earmark isomorphic files, and let [**`packen`**](.) do the rest.
-- 🛠️&emsp;Flexible: use [**`packen`**](.) with _any_ bundler you like, [the way you like]((#bundling).
+- 🛠️&emsp;Flexible: use [**`packen`**](.) with _any_ bundler you like, [the way you like](#bundling).
 - 🧩&emsp;Extensible: write your own [custom processors](#extension) suitable for your use cases.
 
 <br>
