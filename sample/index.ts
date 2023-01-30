@@ -1,4 +1,4 @@
-import { Bundle, write, sideEffectImport } from '../src'
+import { Bundle, build } from '../src'
 
 
 const bundle = new Bundle()
@@ -6,4 +6,4 @@ const bundle = new Bundle()
 import './foo'
 import './bar'
 
-write(bundle, 'sample/tmp/entry.ts', sideEffectImport({ importRoot: __dirname + '/tmp' }))
+build(bundle, 'sample/tmp/entry.js')

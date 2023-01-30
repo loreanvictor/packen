@@ -1,10 +1,12 @@
 import { writeFile } from 'fs/promises'
 
 import { Bundle } from './iso'
-import { Processor, sideEffectImport } from './processor'
+import { Processor, bareImport } from './processor'
 
 
-export function serialize(bundle: Bundle, processor = sideEffectImport()) {
+export function serialize(bundle: Bundle, processor = bareImport()) {
+  bundle.close()
+
   return bundle.entries.map(processor).join('\n')
 }
 

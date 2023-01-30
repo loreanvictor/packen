@@ -4,13 +4,13 @@ import { noExt, relativeTo } from './util'
 export type Processor = (entry: NodeJS.CallSite) => string
 
 
-export interface SideEffectImportOptions {
+export interface BareImportOptions {
   importRoot?: string
   includeExtensions?: boolean
 }
 
 
-export const sideEffectImport = (options?: SideEffectImportOptions) => (entry: NodeJS.CallSite) => {
+export const bareImport = (options?: BareImportOptions) => (entry: NodeJS.CallSite) => {
   let res = entry.getFileName()!
 
   !options?.includeExtensions && (res = noExt(res))

@@ -24,7 +24,7 @@ jobs:
         run: npm run lint
 
       - name: Fix README for NPM
-        run: sed -i.tmp -e '11d' README.md && rm README.md.tmp
+        run: sed -i.tmp -e '9d' README.md && rm README.md.tmp
       
       - name: Publish
         uses: JS-DevTools/npm-publish@v1

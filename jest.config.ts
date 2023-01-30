@@ -2,7 +2,7 @@ export default {
   preset: 'ts-jest',
   verbose: true,
   clearMocks: true,
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   testEnvironmentOptions: {
     url: 'http://localhost',
   },
@@ -10,6 +10,7 @@ export default {
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.test.{ts,tsx}',
+    '!src/**/test/.*/*.{ts, tsx}'
   ],
   coverageThreshold: {
     global: {

@@ -6,23 +6,17 @@
 
 </div>
 
-
-
 <img src="logo-dark.svg#gh-dark-mode-only" height="64px"/>
 <img src="logo-light.svg#gh-light-mode-only" height="64px"/>
 
-<small>Pack isomorphic JavaScript</small>
+<br>
 
-
-
-<br><br>
-
-`packen` helps with collecting [isomorphic JavaScript](https://en.wikipedia.org/wiki/Isomorphic_JavaScript) code executed server-side so that it can get bundled, shipped and executed on client-side. It can act as a simple utility collecting & shipping side effects (such as [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) registration code) to client, or as a basis for more involved isomorphic JavaScript application (such as tooling-specific SSR).
+[**`packen`**](.) collects [isomorphic JavaScript](https://en.wikipedia.org/wiki/Isomorphic_JavaScript) code when it runs on the server, and prepares it for shipping to and running on the client. Useful for server side rendering (SSR), static site generation (SSG), etc.
 
 ```js
 // server side code:
 
-import { Bundle, write } from 'packen'
+import { Bundle, build } from 'packen'
 
 const bundle = new Bundle()
 
@@ -30,7 +24,7 @@ const bundle = new Bundle()
 // some isomorphic code you want to ship
 // to client as well ...
 
-write(bundle, 'dist/bundle.entry.js')
+build(bundle, 'dist/bundle.js')
 ```
 ```js
 // isomorphic code:
@@ -47,17 +41,212 @@ packMe()
 
 <br>
 
-Executing this code will result in a file at `dist/bundle.entry.js`, which can be safely imported and bundled for
-browser.
+- ☕&emsp;Convenient: earmark isomorphic files, and let [**`packen`**](.) do the rest.
+- 🛠️&emsp;Flexible: use [**`packen`**](.) with _any_ bundler you like, [the way you like]((#bundling).
+- 🧩&emsp;Extensible: write your own [custom processors](#extension) suitable for your use cases.
 
-- You need your own bundler, `packen` only gives you an entry file (which honestly, you could create manually rather easily, so use `packen` only if you are super lazy or if you want to build further tooling on top of it).
-- Make sure to import stuff from `packen/iso` instead of `packen` on isomorphic bits of the code, as otherwise your bundler will run into issues trying to bundle server-specific code (such as `fs` stuff).
+<br>
+
+# Installation
+
+You need [Node.js](https://nodejs.org) for using `packen`.
+
+```bash
+npm i packen
+```
+
+<br>
+
+# Usage
+
+**STEP 1**: Create a bundle:
+
+```js
+// server side code:
+import { Bundle } from 'packen'
+
+const bundle = new Bundle()
+```
+
+<br>
+
+**STEP 2**: earmark your isomorphic code:
+
+```js
+// isomorphic code:
+import { packMe } from 'packen/iso'
+
+packMe()
+
+// rest of your code
+```
+
+> You can also call `packMe()` inside a function. It will earmark the file it resides in when the function is called.
+
+> On your isomorphic code, import from `packen/iso` and NOT `packen`. [**`packen`**](.) relies on some Node.js APIs, which can't be bundled and shipped to the client. `packen/iso` is a tiny subset of [**`packen`**](.) that can be bundled and shipped to the client.
+
+<br>
+
+**STEP 3**: run the isomorphic code on the server:
+
+```js
+// server side code:
+
+import 'my/isomorphic/code'
+```
+
+> If you call `packMe()` inside a function, you need to call that function to collect the file.
+
+<br>
+
+**STEP 4**: build the bundle:
+
+```js
+// server side code:
+import { build } from 'packen'
+
+build(bundle, 'dist/bundle.js')
+```
+
+<br>
+
+## Bundling
+
+[**`packen`**](.) provides a flexible API for building bundles:
+
+<br>
+
+### Build
+
+```ts
+build(bundle: Bundle, path: string, processor?: Processor): void
+```
+
+Builds given bundle, bundles and minifies it (using [esbuild](https://esbuild.github.io)) and writes it to given path. If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)).
+
+```js
+import { Bundle, build } from 'packen'
+
+const bundle = new Bundle()
+
+// ...
+
+build(bundle, 'dist/bundle.js')
+```
+
+<br>
+
+### Pack
+
+```ts
+pack(bundle: Bundle, processor?: Processor): string
+```
+
+Builds given bundle, returning the bundled and minified code as a strin (uses [esbuild](https://esbuild.github.io)). If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)).
+
+```js
+import { Bundle, pack } from 'packen'
+
+const bundle = new Bundle()
+
+// ...
+
+const code = pack(bundle)
+```
+
+<br>
+
+This method can be used for generating server-side HTML:
+
+```js
+const myHTML = html`
+  <html>
+    <head>
+      <script type="module">
+        ${pack(bundle)}
+      </script>
+    </head>
+    <body>
+      <!-- ... -->
+    </body>
+  </html>
+`
+```
+
+<br>
+
+### Write
+
+```ts
+write(bundle: Bundle, path: string, processor?: Processor): void
+```
+
+Builds an entry file for given bundle, and writes it to given path. If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)). DOES NOT bundle or minify the code.
+
+```js
+import { Bundle, write } from 'packen'
+
+const bundle = new Bundle()
+
+// ...
+
+write(bundle, 'dist/entry.js')
+```
+
+<br>
+
+This entry file can be used with other bundlers, like [Vite](https://vitejs.dev):
+
+```html
+<!-- index.html -->
+<script type="module" src="dist/entry.js"></script>
+<!-- ... -->
+```
+```bash
+vite build
+```
+
+<br>
+
+### Serialize
+
+```ts
+serialize(bundle: Bundle, processor?: Processor): string
+```
+
+Builds an entry file for given bundle, returning the code as a string. If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)). DOES NOT bundle or minify the code.
+
+```js
+import { Bundle, serialize } from 'packen'
+
+const bundle = new Bundle()
+
+// ...
+
+const code = serialize(bundle)
+```
+
+<br>
+
+This is particularly useful when you want to use other bundlers programmatically (or even using [esbuild](https://esbuild.github.io) with some custom configuration):
+
+```js
+import { build } from 'esbuild'
+
+  await build({
+    stdin: {
+      contents: serialize(bundle, processor),
+      resolveDir: process.cwd(),
+    },
+    // your esbuild configuration
+  })
+```
 
 <br>
 
 # Extension
 
-By default, `packen` will just import collected files as side-effect:
+By default, [**packen**](.) will use bare imports, collecting files as side-effect:
 
 ```js
 // entry file
@@ -91,7 +280,7 @@ This processor can be used like this:
 ```js
 // ...
 
-write(bundle, 'dist/bundle.entry.js', dryRun)
+build(bundle, 'dist/bundle.js', dryRun)
 ```
 ```js
 // isomorphic code

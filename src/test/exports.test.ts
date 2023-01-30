@@ -1,6 +1,6 @@
 import {
   callsite, Bundle, packMe, packCaller,
-  sideEffectImport, SideEffectImportOptions, Processor,
+  BareImportOptions, bareImport, Processor,
   serialize, write
 
 } from '../'
@@ -11,8 +11,8 @@ test('everything is exported', () => {
   expect(Bundle).toBeDefined()
   expect(packMe).toBeDefined()
   expect(packCaller).toBeDefined()
-  expect(sideEffectImport).toBeDefined()
-  expect(<SideEffectImportOptions>{}).toBeDefined()
+  expect(bareImport).toBeDefined()
+  expect(<BareImportOptions>{}).toBeDefined()
   expect(<Processor>{}).toBeDefined()
   expect(serialize).toBeDefined()
   expect(write).toBeDefined()

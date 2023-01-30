@@ -2,5 +2,6 @@
 {
   "main": "../dist/commonjs/iso/index.js",
   "module": "../dist/es/iso/index.js",
-  "types": "../dist/es/iso/index.d.ts"
+  "types": "../dist/es/iso/index.d.ts",
+  "sideEffects": false
 }
