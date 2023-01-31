@@ -14,36 +14,28 @@
 [**`packen`**](.) collects [isomorphic JavaScript](https://en.wikipedia.org/wiki/Isomorphic_JavaScript) code when it runs on the server, and prepares it for shipping to and running on the client. Useful for server side rendering (SSR), static site generation (SSG), etc.
 
 ```js
-// server side code:
-
-import { Bundle, build } from 'packen/server'
-
-const bundle = new Bundle()
-
-// run some server-side code, including
-// some isomorphic code you want to ship
-// to client as well ...
-
-build(bundle, 'dist/bundle.js')
-```
-```js
 // isomorphic code:
-
 import { packMe } from 'packen'
 
-// 👇 call this in your file with side effects, so that it is collected
-//    in the bundle. this has no effect if a bundle is not created before
-//    its execution.
 packMe()
 
-// run the isomorphic code, for example registring some web components.
+// ...
+```
+```bash
+node -r packen/r server-code.js
 ```
 
 <br>
 
-- ☕&emsp;Convenient: earmark isomorphic files, and let [**`packen`**](.) do the rest.
-- 🛠️&emsp;Flexible: use [**`packen`**](.) with _any_ bundler you like, [the way you like](#bundling).
-- 🧩&emsp;Extensible: write your own [custom processors](#extension) suitable for your use cases.
+- ☕&ensp;_Simple_: mark isomorphic code, [**`packen`**](.) does the rest
+- 🧠&ensp;_Smart_: only ship what you need with [conditional bundling](#conditional-bundling)
+- 🛠️&ensp;_Flexible_: integrate [**`packen`**](.) [with your own toolchain](#bundling)
+- 🧩&ensp;_Extensible_: write your own [custom processors](#extension)
+
+<br>
+
+> [**packen**](.) provides a convenient out-of-the-box solution, but it is mainly designed to be used programmatically
+> as part of other tooling. As a result, its configuration options in non-programmatical use are fairly limited.
 
 <br>
 
@@ -59,58 +51,22 @@ npm i packen
 
 # Usage
 
-**STEP 1**: Create a bundle:
+To use [**packen**](.), you need to:
 
-```js
-// server side code:
-import { Bundle } from 'packen/server'
-
-const bundle = new Bundle()
-```
-
-<br>
-
-**STEP 2**: earmark your isomorphic code:
-
-```js
-// isomorphic code:
-import { packMe } from 'packen'
-
-packMe()
-
-// rest of your code
-```
-
-> You can also call `packMe()` inside a function. It will earmark the file it resides in when the function is called.
-
-<br>
-
-**STEP 3**: run the isomorphic code on the server:
-
-```js
-// server side code:
-
-import 'my/isomorphic/code'
-```
-
-> If you call `packMe()` inside a function, you need to call that function to collect the file.
-
-<br>
-
-**STEP 4**: build the bundle:
-
-```js
-// server side code:
-import { build } from 'packen/server'
-
-build(bundle, 'dist/bundle.js')
-```
+- Mark your isomorphic code
+- Run your server code, which may use (some of) your isomorphic code
+- Create a bundle from isomorphic code that was used
 
 <br>
 
 ## Bundling
 
 [**`packen`**](.) provides a flexible API for building bundles:
+
+- [`build()`](#build): creates a bundle from collected code using [esbuild](https://esbuild.github.io) and writes it to given file.
+- [`pack()`](#pack): creates a bundle from collected code using [esbuild](https://esbuild.github.io) and returns it as a string.
+- [`write()`](#write): creates an entry point from collected code and writes it to given file. You might need to bundle this entry file using your own bundler before shipping it to client (tools such as [Vite](https://vitejs.dev) can consume it directly).
+- [`serialize()`](#serialize): creates an entry point from collected code and returns it as a string.
 
 <br>
 
