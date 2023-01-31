@@ -1,5 +1,5 @@
 import { readFile, unlink } from 'fs/promises'
-import { Bundle } from '../iso'
+import { Bundle } from '../../iso'
 import { serialize, write } from '../write'
 
 

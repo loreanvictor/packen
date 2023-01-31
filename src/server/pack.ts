@@ -2,7 +2,7 @@ import { writeFile } from 'fs/promises'
 import { build as _build } from 'esbuild'
 
 import { serialize } from './write'
-import { Bundle } from './iso'
+import { Bundle } from '../iso'
 import { Processor } from './processor'
 
 

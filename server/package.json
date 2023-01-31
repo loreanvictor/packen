@@ -1,0 +1,7 @@
+
+{
+  "main": "../dist/commonjs/server/index.js",
+  "module": "../dist/es/server/index.js",
+  "types": "../dist/es/server/index.d.ts",
+  "sideEffects": false
+}

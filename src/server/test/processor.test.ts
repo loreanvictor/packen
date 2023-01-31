@@ -1,6 +1,6 @@
 import { bareImport } from '../processor'
 import { noExt, relativeTo } from '../util'
-import { callsite } from '../iso'
+import { callsite } from '../../iso'
 
 
 describe(bareImport, () => {

@@ -16,7 +16,7 @@
 ```js
 // server side code:
 
-import { Bundle, build } from 'packen'
+import { Bundle, build } from 'packen/server'
 
 const bundle = new Bundle()
 
@@ -29,7 +29,7 @@ build(bundle, 'dist/bundle.js')
 ```js
 // isomorphic code:
 
-import { packMe } from 'packen/iso'
+import { packMe } from 'packen'
 
 // 👇 call this in your file with side effects, so that it is collected
 //    in the bundle. this has no effect if a bundle is not created before
@@ -63,7 +63,7 @@ npm i packen
 
 ```js
 // server side code:
-import { Bundle } from 'packen'
+import { Bundle } from 'packen/server'
 
 const bundle = new Bundle()
 ```
@@ -74,7 +74,7 @@ const bundle = new Bundle()
 
 ```js
 // isomorphic code:
-import { packMe } from 'packen/iso'
+import { packMe } from 'packen'
 
 packMe()
 
@@ -82,8 +82,6 @@ packMe()
 ```
 
 > You can also call `packMe()` inside a function. It will earmark the file it resides in when the function is called.
-
-> On your isomorphic code, import from `packen/iso` and NOT `packen`. [**`packen`**](.) relies on some Node.js APIs, which can't be bundled and shipped to the client. `packen/iso` is a tiny subset of [**`packen`**](.) that can be bundled and shipped to the client.
 
 <br>
 
@@ -103,7 +101,7 @@ import 'my/isomorphic/code'
 
 ```js
 // server side code:
-import { build } from 'packen'
+import { build } from 'packen/server'
 
 build(bundle, 'dist/bundle.js')
 ```
@@ -125,7 +123,7 @@ build(bundle: Bundle, path: string, processor?: Processor): void
 Builds given bundle, bundles and minifies it (using [esbuild](https://esbuild.github.io)) and writes it to given path. If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)).
 
 ```js
-import { Bundle, build } from 'packen'
+import { Bundle, build } from 'packen/server'
 
 const bundle = new Bundle()
 
@@ -145,7 +143,7 @@ pack(bundle: Bundle, processor?: Processor): string
 Builds given bundle, returning the bundled and minified code as a strin (uses [esbuild](https://esbuild.github.io)). If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)).
 
 ```js
-import { Bundle, pack } from 'packen'
+import { Bundle, pack } from 'packen/server'
 
 const bundle = new Bundle()
 
@@ -184,7 +182,7 @@ write(bundle: Bundle, path: string, processor?: Processor): void
 Builds an entry file for given bundle, and writes it to given path. If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)). DOES NOT bundle or minify the code.
 
 ```js
-import { Bundle, write } from 'packen'
+import { Bundle, write } from 'packen/server'
 
 const bundle = new Bundle()
 
@@ -217,7 +215,7 @@ serialize(bundle: Bundle, processor?: Processor): string
 Builds an entry file for given bundle, returning the code as a string. If a processor is provided, will be used for processing earmarked entries (see [Extension](#extension)). DOES NOT bundle or minify the code.
 
 ```js
-import { Bundle, serialize } from 'packen'
+import { Bundle, serialize } from 'packen/server'
 
 const bundle = new Bundle()
 
@@ -285,7 +283,7 @@ build(bundle, 'dist/bundle.js', dryRun)
 ```js
 // isomorphic code
 
-import { packMe } from 'packen/iso'
+import { packMe } from 'packen'
 
 export const myFunc = () => {
 

@@ -1,6 +1,6 @@
 import { writeFile } from 'fs/promises'
 
-import { Bundle } from './iso'
+import { Bundle } from '../iso'
 import { Processor, bareImport } from './processor'
 
 

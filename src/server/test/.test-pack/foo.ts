@@ -1,4 +1,4 @@
-import { packMe } from '../../iso'
+import { packMe } from '../../../iso'
 
 packMe()
 

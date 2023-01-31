@@ -2,7 +2,7 @@ import { JSDOM } from 'jsdom'
 import { readFile, unlink } from 'fs/promises'
 
 import { build } from '../pack'
-import { Bundle } from '../iso'
+import { Bundle } from '../../iso'
 
 
 describe(build, () => {
