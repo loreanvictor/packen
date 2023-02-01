@@ -32,4 +32,27 @@ describe(Bundle, () => {
     expect(bundle.closed).toBe(true)
     expect(bundle.entries).toEqual([])
   })
+
+  test('resolves duplicates.', () => {
+    const bundle = new Bundle()
+
+    function f() {
+      const siteA = callsite()[0]!
+      const siteB = callsite()[0]!
+
+      bundle.collect(siteA)
+      bundle.collect(siteB)
+    }
+
+    function g() {
+      bundle.collect(callsite()[0]!)
+    }
+
+    f()
+    g()
+
+    expect(bundle.entries.length).toBe(2)
+    expect(bundle.entries[0]!.getFunctionName()).toBe('f')
+    expect(bundle.entries[1]!.getFunctionName()).toBe('g')
+  })
 })

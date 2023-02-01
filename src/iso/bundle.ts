@@ -18,7 +18,12 @@ export class Bundle {
 
   collect(entry: NodeJS.CallSite) {
     if (!this.closed) {
-      this.entries.push(entry)
+      if (!this.entries.some(e =>
+        e.getFileName() === entry.getFileName()
+        && e.getFunctionName() === entry.getFunctionName()
+      )) {
+        this.entries.push(entry)
+      }
     }
   }
 }
