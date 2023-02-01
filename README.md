@@ -292,7 +292,7 @@ import '/Path/to/some/isomorphic.js'
 
 <br>
 
-You can change this behavior by providing a _processor_ function to `write()` method. This processor will be passed a [`CallSite`](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules__types_node_globals_d_.nodejs.callsite.html), and should turn it into some valid JavaScript string. For example, the following custom processor allows collecting specific functions, which then will be executed on client side:
+You can change this behavior by providing a _processor_ function to bundling functions. This processor will be passed a [`CallSite`](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules__types_node_globals_d_.nodejs.callsite.html), and should turn it into some valid JavaScript string. For example, the following custom processor allows collecting specific functions, which then will be executed on client side:
 
 ```js
 export dryRun = entry => {
