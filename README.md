@@ -28,14 +28,9 @@ node -r packen/r server-code.js
 <br>
 
 - ☕&ensp;_Simple_: mark isomorphic code, [**`packen`**](.) does the rest
-- 🧠&ensp;_Smart_: only ship what you need with [conditional bundling](#conditional-bundling)
+- 🧠&ensp;_Smart_: only ship what you need with [conditional bundling](#usage)
 - 🛠️&ensp;_Flexible_: integrate [**`packen`**](.) [with your own toolchain](#bundling)
 - 🧩&ensp;_Extensible_: write your own [custom processors](#extension)
-
-<br>
-
-> [**packen**](.) provides a convenient out-of-the-box solution, but it is mainly designed to be used programmatically
-> as part of other tooling. As a result, its configuration options in non-programmatical use are fairly limited.
 
 <br>
 
@@ -55,13 +50,98 @@ To use [**packen**](.), you need to:
 
 - Mark your isomorphic code
 - Run your server code, which may use (some of) your isomorphic code
-- Create a bundle from isomorphic code that was used
+
+[**packen**](.) will keep track of what was used and bundle it for you (or help you bundle it using your own toolchain).
 
 <br>
 
-## Bundling
+👉 Use `packMe()` to mark your isomorphic code:
 
-[**`packen`**](.) provides a flexible API for building bundles:
+```js
+import { packMe } from 'packen'
+
+packMe()
+// this file will be included in the bundle
+```
+
+You can also conditionally mark a file:
+
+```js
+if (condition()) {
+  packMe()
+}
+
+// this file will be included in the bundle
+// only if condition() is true.
+```
+```js
+export function func() {
+  packMe()
+  // this file will be included in the bundle
+  // only when func() is called.
+  
+  // ...
+}
+```
+<br>
+
+You can create the bundle either programmatically or using the CLI. [**packen**](.) is mainly designed to be used programmatically (as part of other tooling), but the CLI route offers a convenient out-of-the-box method suitable for static site generation (SSG), albeit with limited configuration options.
+
+<br>
+
+## CLI
+
+```bash
+node -r packen/r sever_code.js
+```
+```bash
+ts-node -r packen/r server_code.ts
+```
+
+<br>
+
+☝️ This will execute `server_code.js`, and bundle any [marked](#usage) isomorphic code in an output `bundle.js`. You can customize the output file by providing the `PACKEN_TO` environment variable:
+
+```bash
+PACKEN_TO=dist/chunk.js node -r packen/r server_code.js
+```
+```bash
+PACKEN_TO=dist/chunk.js ts-node -r packen/r server_code.ts
+```
+
+
+<br>
+
+## Programmatic API
+
+```js
+import { Bundle, build } from 'packen/server'
+
+//
+// 👉 STEP 1: create a bundle
+//
+const bundle = new Bundle()
+
+//
+// 👉 STEP 2: run your isomorphic code
+//
+import './my/iso.js'
+
+...
+
+//
+// 👉 STEP 3: build the bundle
+//
+await build(bundle, 'dist/chunk.js')
+```
+
+<br>
+
+A `Bundle` MUST have been created before the isomorphic code is executed. Calling `packMe()` when no bundle is created will have no effect. Additionally, when you build a bundle, it is _closed_, which means it can no longer collect isomorphic code, and you need to make a new bundle.
+
+<br>
+
+[**`packen`**](.) provides various methods for building bundles:
 
 - [`build()`](#build): creates a bundle from collected code using [esbuild](https://esbuild.github.io) and writes it to given file.
 - [`pack()`](#pack): creates a bundle from collected code using [esbuild](https://esbuild.github.io) and returns it as a string.
