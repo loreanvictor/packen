@@ -1,4 +1,4 @@
-import { callsite, Bundle, packMe, packCaller } from '../'
+import { callsite, Bundle, packMe, packCaller, mark, markCaller, collect } from '../'
 
 
 test('everything is exported', () => {
@@ -6,4 +6,7 @@ test('everything is exported', () => {
   expect(Bundle).toBeDefined()
   expect(packMe).toBeDefined()
   expect(packCaller).toBeDefined()
+  expect(mark).toBeDefined()
+  expect(markCaller).toBeDefined()
+  expect(collect).toBeDefined()
 })

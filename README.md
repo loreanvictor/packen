@@ -278,6 +278,53 @@ import { build } from 'esbuild'
 
 <br>
 
+## Advanced Usage
+
+👉 Use `packCaller()` from inside a function to pack the code that called that function:
+
+```js
+import { packCaller } from 'packen'
+
+// any code calling func will now be packed automatically.
+export function func() {
+  packCaller()
+
+  // ...
+}
+```
+
+👉 Use `mark()` and `collect()` to create a mark that can be called later (perhaps due to some later event):
+
+```js
+import { mark, collect } from 'packen'
+
+
+const flag = mark()
+
+// when laterCallback is called, this file will be collected and bundled.
+export function laterCallback() {
+  collect(flag)
+
+  // ...
+}
+```
+
+👉 Use `markCaller()` and `collect()` to create a mark for the calling code that can be called later (perhaps due to some later event):
+
+```js
+import { markCaller, collect } from 'packen'
+
+
+function someFunc() {
+  const flag = markCaller()
+
+  // when this is called, the code that called someFunc will be collected and bundled.
+  return () => collect(flag)
+}
+```
+
+<br>
+
 # Extension
 
 By default, [**packen**](.) will use bare imports, collecting files as side-effect:
